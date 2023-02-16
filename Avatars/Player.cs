@@ -183,7 +183,7 @@ public class Player : Avatar
             m_bulletsShot++;
             DisplayShots.text = "Shots: " + m_bulletsShot;
             SoundsController.Instance.PlaySoundFX(SoundsController.FX_SHOOT, false, 1);
-            //ChangeAnimation((int)ANIMATION_STATES.ANIMATION_ATTACK);
+            ChangeAnimation((int)ANIMATION_STATES.ANIMATION_ATTACK);
             
             
         }

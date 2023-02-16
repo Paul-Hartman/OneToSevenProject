@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Waypoint
 {
-    public enum ActionsPatrol { GO = 0, STAY }
+    public enum ActionsPatrol { GO = 0, STAY, LOOK }
     public ActionsPatrol Action;
     public GameObject Target;
     public Vector3 Position;

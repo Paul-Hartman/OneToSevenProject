@@ -35,7 +35,7 @@ public class PatrolWaypoints : StateMachine
 
     
 
-    public enum PATROL_STATES { SYNCHRONIZATION = 0, UPDATE_WAYPOINT, GO_TO_WAYPOINT, STAY_IN_WAYPOINT }
+    public enum WAYPOINT_ACTIONS { SYNCHRONIZATION = 0, UPDATE_WAYPOINT, GO_TO_WAYPOINT, STAY_IN_WAYPOINT, LOOK_TO_WAYPOINT }
 
 
     private bool m_hasRigidBody;
@@ -81,7 +81,7 @@ public class PatrolWaypoints : StateMachine
         {
             Speed = _speed;
             m_activated = true;
-            ChangeState((int)PATROL_STATES.SYNCHRONIZATION);
+            ChangeState((int)WAYPOINT_ACTIONS.SYNCHRONIZATION);
         }
         
     }
@@ -166,9 +166,9 @@ public class PatrolWaypoints : StateMachine
     {
         base.ChangeState(newState);
 
-        switch ((PATROL_STATES)m_state)
+        switch ((WAYPOINT_ACTIONS)m_state)
         {
-            case PATROL_STATES.SYNCHRONIZATION:
+            case WAYPOINT_ACTIONS.SYNCHRONIZATION:
                 if (IsThereRotationComponent())
                 {
                     m_rotateComponent.ActivateRotation(Waypoints[CurrentWaypoint].Position);
@@ -177,16 +177,16 @@ public class PatrolWaypoints : StateMachine
                 break;
 
 
-            case PATROL_STATES.UPDATE_WAYPOINT:
+            case WAYPOINT_ACTIONS.UPDATE_WAYPOINT:
 
                 break;
 
 
-            case PATROL_STATES.GO_TO_WAYPOINT:
+            case WAYPOINT_ACTIONS.GO_TO_WAYPOINT:
                 DispatchMovingEvent();
                 break;
 
-            case PATROL_STATES.STAY_IN_WAYPOINT:
+            case WAYPOINT_ACTIONS.STAY_IN_WAYPOINT:
                 DispatchStandingEvent();
                 break;
         }
@@ -196,18 +196,18 @@ public class PatrolWaypoints : StateMachine
     void Update()
     {
         if (!m_activated) return;
-         switch((PATROL_STATES)m_state)
+         switch((WAYPOINT_ACTIONS)m_state)
         {
-            case PATROL_STATES.SYNCHRONIZATION:
+            case WAYPOINT_ACTIONS.SYNCHRONIZATION:
                 WalkWithSpeedToWaypoint();
                 if (ReachedCurrentWaypoint())
                 {
-                ChangeState((int)PATROL_STATES.UPDATE_WAYPOINT);
+                ChangeState((int)WAYPOINT_ACTIONS.UPDATE_WAYPOINT);
                 }
                 break;
 
 
-            case PATROL_STATES.UPDATE_WAYPOINT:
+            case WAYPOINT_ACTIONS.UPDATE_WAYPOINT:
                 CurrentWaypoint++;
                 if(CurrentWaypoint > Waypoints.Length -1)
                {
@@ -222,13 +222,15 @@ public class PatrolWaypoints : StateMachine
                 switch (Waypoints[CurrentWaypoint].Action) 
                 {
                     case Waypoint.ActionsPatrol.GO:
-                        ChangeState((int)PATROL_STATES.GO_TO_WAYPOINT);
+                        ChangeState((int)WAYPOINT_ACTIONS.GO_TO_WAYPOINT);
                         break;
                     case Waypoint.ActionsPatrol.STAY:
-                        ChangeState((int)PATROL_STATES.STAY_IN_WAYPOINT);
+                        ChangeState((int)WAYPOINT_ACTIONS.STAY_IN_WAYPOINT);
                         break;
 
-
+                    case Waypoint.ActionsPatrol.LOOK:
+                        ChangeState((int)WAYPOINT_ACTIONS.LOOK_TO_WAYPOINT);
+                        break;
 
                 }
                
@@ -236,22 +238,36 @@ public class PatrolWaypoints : StateMachine
                 break;
 
 
-            case PATROL_STATES.GO_TO_WAYPOINT:
+            case WAYPOINT_ACTIONS.GO_TO_WAYPOINT:
                 WalkToCurrentWaypoint();
                 if(m_timeDone > Waypoints[CurrentWaypoint].Duration)
                 {
                     
-                 ChangeState((int)PATROL_STATES.UPDATE_WAYPOINT);
+                 ChangeState((int)WAYPOINT_ACTIONS.UPDATE_WAYPOINT);
                 }
             break;
 
-            case PATROL_STATES.STAY_IN_WAYPOINT:
+            case WAYPOINT_ACTIONS.STAY_IN_WAYPOINT:
                 
                 m_timeDone += Time.deltaTime;
                 if(m_timeDone > Waypoints[CurrentWaypoint].Duration)
                 {
                     
-                    ChangeState((int)PATROL_STATES.UPDATE_WAYPOINT);
+                    ChangeState((int)WAYPOINT_ACTIONS.UPDATE_WAYPOINT);
+                }
+                break;
+
+            case WAYPOINT_ACTIONS.LOOK_TO_WAYPOINT:
+
+                m_timeDone += Time.deltaTime;
+                if (IsThereRotationComponent())
+                {
+                    m_rotateComponent.ActivateRotation(Waypoints[CurrentWaypoint].Position);
+                }
+                if (m_timeDone > Waypoints[CurrentWaypoint].Duration)
+                {
+
+                    ChangeState((int)WAYPOINT_ACTIONS.UPDATE_WAYPOINT);
                 }
                 break;
         }

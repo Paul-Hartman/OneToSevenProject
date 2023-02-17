@@ -15,8 +15,9 @@ public class Enemy : Avatar
 
 
     public float DistanceDetection = 10f;
-    public float DistanceShooting = 10f;
+    public float DistanceShooting = 5f;
     
+
     private Vector3 m_initialPosition;
 
     public GameObject BulletEnemy;
@@ -171,8 +172,17 @@ public class Enemy : Avatar
         else
         {
             if (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceDetection)
-            {
-                return true;
+            {   
+                if(Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
+                
             }
             else
             {
@@ -190,7 +200,22 @@ public class Enemy : Avatar
         {   
             if(m_detectedPlayer)
             {
-                return  (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceShooting);
+                if  (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceShooting)
+                {
+                    if (Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -202,7 +227,14 @@ public class Enemy : Avatar
         {
             if (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceShooting)
             {
-                return true;
+                if (Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

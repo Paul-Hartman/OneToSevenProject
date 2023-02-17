@@ -34,6 +34,7 @@ public class AreaVisionDetection : MonoBehaviour
 	public TargetCharacters Target = TargetCharacters.PLAYER;
 
 	public bool UseBehavior = true;
+	public float HeightDetection = 4;
 
 	private GameObject m_planeAreaVisionDetection;
 	private int m_checkRadiusInstances = 10;
@@ -170,23 +171,28 @@ public class AreaVisionDetection : MonoBehaviour
 			case TargetCharacters.PLAYER:
 				if (GameController.Instance.MyPlayer != null)
                 {
-					if (IsInsideCone(this.gameObject, angle, GameController.Instance.MyPlayer.gameObject, DetectionDistance, DetectionAngle) > 0)
-					{
-						if (m_currentDetection == null)
-                        {
-							Debug.Log("<color=red>PLAYER DETECTED!!!</color>");
-							m_currentDetection = GameController.Instance.MyPlayer.gameObject;
-							DispatchVisionDetectionEvent(GameController.Instance.MyPlayer.gameObject);
-						}
-					}
-					else
+					float heightDistance = Mathf.Abs(this.gameObject.transform.position.y - GameController.Instance.MyPlayer.transform.position.y);
+					if(heightDistance < HeightDetection)
                     {
-						if (m_currentDetection != null)
-                        {
-							m_currentDetection = null;
-							DispatchVisionLostEvent(GameController.Instance.MyPlayer.gameObject);
+						if (IsInsideCone(this.gameObject, angle, GameController.Instance.MyPlayer.gameObject, DetectionDistance, DetectionAngle) > 0)
+						{
+							if (m_currentDetection == null)
+							{
+								Debug.Log("<color=red>PLAYER DETECTED!!!</color>");
+								m_currentDetection = GameController.Instance.MyPlayer.gameObject;
+								DispatchVisionDetectionEvent(GameController.Instance.MyPlayer.gameObject);
+							}
+						}
+						else
+						{
+							if (m_currentDetection != null)
+							{
+								m_currentDetection = null;
+								DispatchVisionLostEvent(GameController.Instance.MyPlayer.gameObject);
+							}
 						}
 					}
+					
 				}
 				break;
 
@@ -195,26 +201,31 @@ public class AreaVisionDetection : MonoBehaviour
                 {
 					for (int i = 0; i < LevelController.Instance.Enemies.Length; i++)
 					{
-						if (IsInsideCone(this.gameObject, angle, LevelController.Instance.Enemies[i].gameObject, DetectionDistance, DetectionAngle) > 0)
-						{
-							if (m_currentDetection == null)
-							{
-								Debug.Log("<color=red>ENEMY DETECTED!!!</color>");
-								m_currentDetection = LevelController.Instance.Enemies[i].gameObject;
-								DispatchVisionDetectionEvent(LevelController.Instance.Enemies[i].gameObject);
-							}
-						}
-						else
+						float heightDistance = Mathf.Abs(this.gameObject.transform.position.y - LevelController.Instance.Enemies[i].gameObject.transform.position.y);
+						if (heightDistance < HeightDetection)
                         {
-							if (m_currentDetection != null)
+							if (IsInsideCone(this.gameObject, angle, LevelController.Instance.Enemies[i].gameObject, DetectionDistance, DetectionAngle) > 0)
 							{
-								if (m_currentDetection == LevelController.Instance.Enemies[i])
-                                {
-									m_currentDetection = null;
-									DispatchVisionLostEvent(LevelController.Instance.Enemies[i].gameObject);
-								}								
+								if (m_currentDetection == null)
+								{
+									Debug.Log("<color=red>ENEMY DETECTED!!!</color>");
+									m_currentDetection = LevelController.Instance.Enemies[i].gameObject;
+									DispatchVisionDetectionEvent(LevelController.Instance.Enemies[i].gameObject);
+								}
+							}
+							else
+							{
+								if (m_currentDetection != null)
+								{
+									if (m_currentDetection == LevelController.Instance.Enemies[i])
+									{
+										m_currentDetection = null;
+										DispatchVisionLostEvent(LevelController.Instance.Enemies[i].gameObject);
+									}
+								}
 							}
 						}
+							
 					}
 				}
 				break;
@@ -224,26 +235,31 @@ public class AreaVisionDetection : MonoBehaviour
 				{
 					for (int i = 0; i < LevelController.Instance.NPCs.Length; i++)
 					{
-						if (IsInsideCone(this.gameObject, angle, LevelController.Instance.NPCs[i].gameObject, DetectionDistance, DetectionAngle) > 0)
+						float heightDistance = Mathf.Abs(this.gameObject.transform.position.y - LevelController.Instance.NPCs[i].gameObject.transform.position.y);
+						if (heightDistance < HeightDetection)
 						{
-							if (m_currentDetection == null)
+							if (IsInsideCone(this.gameObject, angle, LevelController.Instance.NPCs[i].gameObject, DetectionDistance, DetectionAngle) > 0)
 							{
-								Debug.Log("<color=red>NPC DETECTED!!!</color>");
-								m_currentDetection = LevelController.Instance.NPCs[i].gameObject;
-								DispatchVisionDetectionEvent(LevelController.Instance.NPCs[i].gameObject);
-							}
-						}
-						else
-                        {
-							if (m_currentDetection != null)
-							{
-								if (m_currentDetection == LevelController.Instance.NPCs[i])
+								if (m_currentDetection == null)
 								{
-									m_currentDetection = null;
-									DispatchVisionLostEvent(LevelController.Instance.NPCs[i].gameObject);
+									Debug.Log("<color=red>NPC DETECTED!!!</color>");
+									m_currentDetection = LevelController.Instance.NPCs[i].gameObject;
+									DispatchVisionDetectionEvent(LevelController.Instance.NPCs[i].gameObject);
+								}
+							}
+							else
+							{
+								if (m_currentDetection != null)
+								{
+									if (m_currentDetection == LevelController.Instance.NPCs[i])
+									{
+										m_currentDetection = null;
+										DispatchVisionLostEvent(LevelController.Instance.NPCs[i].gameObject);
+									}
 								}
 							}
 						}
+							
 					}
 				}
 				break;

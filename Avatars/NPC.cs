@@ -27,7 +27,7 @@ public class NPC : Avatar
     protected override void Start()
     {
         base.Start();
-        
+        SetTargetLife(GameController.Instance.MyPlayer.transform);
         m_initialPosition = this.transform.position;
         SystemEventController.Instance.Event += ProcessSystemEvent;
         ChangeState((int)NPC_STATES.INITIAL);

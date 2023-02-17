@@ -175,6 +175,7 @@ public class GameController : StateMachine
     public void UserHasPressedReloadGame()
     {
         m_pressedReloadGame = true;
+        
     }
 
     private bool ButtonPressedReturnGame()
@@ -184,6 +185,7 @@ public class GameController : StateMachine
 
     private bool ButtonPressedReloadGame()
     {
+        
         return m_pressedReloadGame;
     }
     private void ActivationScreenMenuMain()
@@ -320,6 +322,7 @@ public class GameController : StateMachine
                 break;
             case CAMERA_STATES.LOSE:
                 Cursor.lockState = CursorLockMode.None;
+                
                 MyPlayer.ResetPlayerLife();
                 StopLogicGameElements();
                 ActivationGameHUD(false);

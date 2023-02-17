@@ -23,7 +23,7 @@ public class Enemy : Avatar
     public GameObject BulletEnemy;
 
     private float m_timerToShoot = 0;
-
+    
     
 
     private bool m_detectedPlayer = false;
@@ -97,7 +97,7 @@ public class Enemy : Avatar
     public override void DecreaseLife(int _unitsToDecrease)
     {   
         base.DecreaseLife(_unitsToDecrease);
-        if (m_life <= 0) 
+        if (m_life <= 0 && !IsDead) 
         {   
 
             
@@ -117,7 +117,7 @@ public class Enemy : Avatar
 
         if (Vector3.Distance(m_initialPosition, this.transform.position) > 1)
         {
-            Vector3 directionVector = GetDirection(m_initialPosition, this.transform.position);
+            Vector3 directionVector = Utilities.GetDirection(m_initialPosition, this.transform.position);
             MoveToPosition(directionVector * Speed * Time.deltaTime);
             ChangeAnimation((int)ANIMATION_STATES.ANIMATION_RUN);
         }
@@ -137,7 +137,7 @@ public class Enemy : Avatar
     private void WalkToPlayer()
     {   
         
-            Vector3 directionToPlayer = GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
+            Vector3 directionToPlayer = Utilities.GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
         
             MoveToPosition(directionToPlayer.normalized * Speed * Time.deltaTime);
         
@@ -153,7 +153,7 @@ public class Enemy : Avatar
             Physics.IgnoreCollision(bullet.GetComponent<Collider>(), this.gameObject.GetComponent<Collider>());
             int type = Bullets.TYPE_BULLET_ENEMY;
             Vector3 position = this.transform.position;
-            Vector3 directionToPlayer = GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
+            Vector3 directionToPlayer = Utilities.GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
             bullet.GetComponent<Bullets>().Shoot(type, position, directionToPlayer);
             SoundsController.Instance.PlaySoundFX(SoundsController.FX_SHOOT, false, 1);
 
@@ -297,7 +297,12 @@ public class Enemy : Avatar
                     m_areaVisionDetection.DestroyVisualArea();
                 }
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_DEATH);
-                SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_ENEMY_DEAD);
+                if (!IsDead)
+                {
+                    SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_ENEMY_DEAD);
+                }
+                IsDead = true;
+                
                 SoundsController.Instance.PlaySoundFX(SoundsController.FX_DEAD_ENEMY, false, 1);
                 
                 break;

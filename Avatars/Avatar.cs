@@ -19,6 +19,7 @@ public abstract class Avatar : StateMachine
 
     protected int m_currentAnimation = -1;
     protected bool m_useRigidBody = true;
+    protected bool IsDead = false;
     public int Life
     {
         get { return m_life; }
@@ -158,10 +159,7 @@ public abstract class Avatar : StateMachine
        
     }
 
-    protected Vector3 GetDirection(Vector3 target, Vector3 origin)
-    {
-        return (target - origin).normalized;
-    }
+   
 
     
 

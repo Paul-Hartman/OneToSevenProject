@@ -82,7 +82,7 @@ public class NPC : Avatar
     {
         base.DecreaseLife(_unitsToDecrease);
 
-        if (m_life <= 0)
+        if (m_life <= 0 && !IsDead)
         {
             Player gamePlayer = GameObject.FindObjectOfType<Player>();
             gamePlayer.Score -= 10;
@@ -100,7 +100,7 @@ public class NPC : Avatar
 
         if (Vector3.Distance(m_initialPosition, this.transform.position) > 1)
         {
-            Vector3 directionVector = GetDirection(m_initialPosition, this.transform.position);
+            Vector3 directionVector = Utilities.GetDirection(m_initialPosition, this.transform.position);
             MoveToPosition(directionVector * Speed * Time.deltaTime);
             ChangeAnimation((int)ANIMATION_STATES.ANIMATION_RUN);
         }
@@ -120,7 +120,7 @@ public class NPC : Avatar
     private void WalkToPlayer()
     {
 
-        Vector3 directionToPlayer = GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
+        Vector3 directionToPlayer = Utilities.GetDirection(GameController.Instance.MyPlayer.transform.position, this.transform.position);
         MoveToPosition(directionToPlayer.normalized * Speed * Time.deltaTime);
 
 
@@ -286,7 +286,12 @@ public class NPC : Avatar
                     m_areaVisionDetection.DestroyVisualArea();
                 }
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_DEATH);
-                SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_NPC_DEAD);
+                if (!IsDead)
+                {
+                    SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_NPC_DEAD);
+                }
+                IsDead = true;
+                
                 SoundsController.Instance.PlaySoundFX(SoundsController.FX_DEAD_NPC, false, 1);
                 
                 break;

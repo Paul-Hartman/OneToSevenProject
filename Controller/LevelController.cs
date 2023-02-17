@@ -19,17 +19,20 @@ public class LevelController : MonoBehaviour
 
     public Enemy[] Enemies;
     public NPC[] NPCs;
+
+    private List<Coin> m_coins = new List<Coin>();
     // Start is called before the first frame update
     void Start()
     {
-        
+        Coin[] coins = GameObject.FindObjectsOfType<Coin>();
+        m_coins.AddRange(coins);
+        SystemEventController.Instance.Event += OnSystemEvent;
     }
 
+    
+
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
 
     public bool PlayerHasKilledAllEnemies()
@@ -144,6 +147,24 @@ public class LevelController : MonoBehaviour
             }
 
             GameObject.Destroy(this.gameObject);
+            SystemEventController.Instance.Event -= OnSystemEvent;
         }
+    }
+
+    private void OnSystemEvent(string _nameEvent, object[] _parameters)
+    {
+        if(_nameEvent == SystemEventController.EVENT_COIN_COLLECTED)
+        {
+            Coin coin = (Coin)_parameters[0];
+            if (m_coins.Remove(coin))
+            {
+                Debug.Log($"<color=red> COIN REMOVED FROM LIST {m_coins.Count}</color>");
+            }
+        }
+    }
+
+    public bool CheckVictory()
+    {
+        return PlayerHasKilledAllEnemies() || (m_coins.Count == 0); 
     }
 }

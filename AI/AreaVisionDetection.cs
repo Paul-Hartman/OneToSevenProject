@@ -66,6 +66,14 @@ public class AreaVisionDetection : MonoBehaviour
 		
 	}
 
+	public void DestroyVisualArea()
+    {
+		if(m_planeAreaVisionDetection != null)
+        {
+			GameObject.Destroy(m_planeAreaVisionDetection);
+        }
+    }
+
 	public void ChangeDistanceArea(float _distanceAreaDetection)
     {
 		DetectionDistance = _distanceAreaDetection;

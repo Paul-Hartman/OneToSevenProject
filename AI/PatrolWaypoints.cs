@@ -30,9 +30,10 @@ public class PatrolWaypoints : StateMachine
     public int CurrentWaypoint = 0;
     private bool m_activated = false;
     private float m_timeDone = 0;
-
+    
     public float Speed =5;
 
+    public bool AutoStart = false;
     
 
     public enum WAYPOINT_ACTIONS { SYNCHRONIZATION = 0, UPDATE_WAYPOINT, GO_TO_WAYPOINT, STAY_IN_WAYPOINT, LOOK_TO_WAYPOINT }
@@ -56,8 +57,11 @@ public class PatrolWaypoints : StateMachine
 
 
             }
-        
-        
+
+        if (AutoStart)
+        {
+            Activatepatrol(10);
+        }
     }
 
     

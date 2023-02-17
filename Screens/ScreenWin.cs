@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class ScreenWin : MonoBehaviour
 {
+    public TextMeshProUGUI EnemiesKilled;
+    public TextMeshProUGUI CoinsCollected;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,9 @@ public class ScreenWin : MonoBehaviour
         this.transform.Find("NextLevelButton").GetComponent<Button>().onClick.AddListener(PressedGoToNextLevel);
 
         this.transform.Find("MainMenuButton").GetComponent<Button>().onClick.AddListener(PressedGoToMainMenu);
+
+        EnemiesKilled.text = $"Enemies Killed: {GameController.Instance.CounterDeadEnemies}";
+        CoinsCollected.text = $"Coins Collected: {GameController.Instance.CounterCollectedCoins}";
     }
 
     private void PressedGoToMainMenu()

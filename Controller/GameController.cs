@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameController : StateMachine
-{   
-
+{
+    public const string TAG_FLOOR = "Floor";
     private static GameController _instance;
     public static GameController Instance
     {

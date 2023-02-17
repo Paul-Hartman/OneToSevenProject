@@ -16,7 +16,7 @@ public class Player : Avatar
     public TextMeshProUGUI DisplayDangerinfo;
     public TextMeshProUGUI DisplayNPCNearby;
 
-
+    private bool m_isTouchingFloor = false;
     private int m_bulletsShot;
 
     public float Sensitivity = 7f;
@@ -27,7 +27,7 @@ public class Player : Avatar
 
     
 
-    public enum ANIMATION_STATES { ANIMATION_IDLE = 0, ANIMATION_WALK, ANIMATION_DIE , ANIMATION_ATTACK }
+    public enum ANIMATION_STATES { ANIMATION_IDLE = 0, ANIMATION_WALK, ANIMATION_DIE , ANIMATION_ATTACK, ANIMATION_JUMP }
 
 
     private Vector3 m_initialPosition;
@@ -116,6 +116,11 @@ public class Player : Avatar
         
     }
 
+    private void Idle()
+    {
+        m_positionCamera = this.transform.position;
+    }
+
     private void Move()
     {
         float axisVertical = Input.GetAxis("Vertical");
@@ -127,6 +132,26 @@ public class Player : Avatar
         
     }
 
+    private void Jump()
+    {
+        if (m_isTouchingFloor)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                m_isTouchingFloor = false;
+                ChangeAnimation((int)ANIMATION_STATES.ANIMATION_JUMP);
+                this.GetComponent<Rigidbody>().AddForce(Vector3.up * 400);
+            }
+        }
+    }
+    private void OnCollisionEnter(Collision _collision)
+    {
+        if(_collision.gameObject.tag == GameController.TAG_FLOOR)
+        {
+            ChangeAnimation((int)ANIMATION_STATES.ANIMATION_IDLE);
+            m_isTouchingFloor =true;
+        }
+    }
     public override void IncreaseLife(int _unitsToIncrease)
     {
         base.IncreaseLife(_unitsToIncrease);
@@ -280,7 +305,8 @@ public class Player : Avatar
         switch ((PLAYER_STATES)m_state)
         {
             case PLAYER_STATES.IDLE:
-                
+                Idle();
+                Jump();
                 RotateCamera();
 
 
@@ -298,6 +324,8 @@ public class Player : Avatar
                 }
                 break;
             case PLAYER_STATES.WALK:
+                
+                Jump();
                 Move();
                 RotateCamera();
                 CheckToDisplayDanger();

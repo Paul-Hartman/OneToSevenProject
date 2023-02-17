@@ -364,7 +364,7 @@ public class GameController : StateMachine
                 case CAMERA_STATES.GAME_RUNNING:
                 RunGame();
 
-                if (LevelController.Instance.PlayerHasKilledAllEnemies())
+                if (LevelController.Instance.CheckVictory())
                 {
                     ChangeState((int)CAMERA_STATES.WIN);
                 }

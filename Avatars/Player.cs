@@ -140,7 +140,7 @@ public class Player : Avatar
             {
                 m_isTouchingFloor = false;
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_JUMP);
-                this.GetComponent<Rigidbody>().AddForce(Vector3.up * 400);
+                this.GetComponent<Rigidbody>().AddForce(Vector3.up * 600);
             }
         }
     }

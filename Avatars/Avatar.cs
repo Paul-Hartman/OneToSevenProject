@@ -8,6 +8,7 @@ public abstract class Avatar : StateMachine
     public int InitialLife = 100;
     public float Speed = 2f;
     public Animator Model3d;
+    public float HeightDetection = 4;
 
     protected int m_life = 100;
     protected PatrolWaypoints m_patrolComponent;

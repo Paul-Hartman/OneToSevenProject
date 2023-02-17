@@ -165,7 +165,14 @@ public class NPC : Avatar
             if (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceDetection)
             {
 
-                return true;
+                if (Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                };
             }
             else
             {
@@ -184,7 +191,22 @@ public class NPC : Avatar
         {
             if (m_detectedPlayer)
             {
-                return (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceTalking);
+                if (Vector3.Distance(GameController.Instance.MyPlayer.transform.position, this.transform.position) < DistanceTalking)
+                {
+                    if (Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                    
             }
             else
             {
@@ -197,7 +219,14 @@ public class NPC : Avatar
             {
 
 
-                return true;
+                if (Mathf.Abs(GameController.Instance.MyPlayer.transform.position.y - this.transform.position.y) < HeightDetection)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

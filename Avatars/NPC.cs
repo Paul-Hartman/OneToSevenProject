@@ -248,6 +248,14 @@ public class NPC : Avatar
 
                 break;
             case NPC_STATES.DIE:
+                if (m_patrolComponent != null)
+                {
+                    m_patrolComponent.DeactivatePatrol();
+                }
+                if (m_areaVisionDetection != null)
+                {
+                    m_areaVisionDetection.DestroyVisualArea();
+                }
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_DEATH);
                 SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_NPC_DEAD);
                 SoundsController.Instance.PlaySoundFX(SoundsController.FX_DEAD_NPC, false, 1);

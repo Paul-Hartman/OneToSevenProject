@@ -256,6 +256,14 @@ public class Enemy : Avatar
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_ATTACK);
                 break;
             case ENEMY_STATES.DIE:
+                if (m_patrolComponent != null)
+                {
+                    m_patrolComponent.DeactivatePatrol();
+                }
+                if(m_areaVisionDetection != null)
+                {
+                    m_areaVisionDetection.DestroyVisualArea();
+                }
                 ChangeAnimation((int)ANIMATION_STATES.ANIMATION_DEATH);
                 SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_ENEMY_DEAD);
                 SoundsController.Instance.PlaySoundFX(SoundsController.FX_DEAD_ENEMY, false, 1);

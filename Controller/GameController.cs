@@ -44,6 +44,17 @@ public class GameController : StateMachine
 
     private int m_counterDeadEnemies = 0;
     private int m_counterDeadNPCs = 0;
+    private int m_counterCollectedCoins = 0;
+
+    public int CounterDeadEnemies
+    {
+        get { return m_counterDeadEnemies; }
+    }
+
+    public int CounterCollectedCoins
+    {
+        get { return m_counterCollectedCoins; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +79,10 @@ public class GameController : StateMachine
         if (_nameEvent == SystemEventController.EVENT_NPC_DEAD)
         {
             m_counterDeadNPCs++;
+        }
+        if(_nameEvent == SystemEventController.EVENT_COIN_COLLECTED)
+        {
+            m_counterCollectedCoins++;
         }
     }
 

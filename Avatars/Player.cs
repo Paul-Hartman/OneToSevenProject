@@ -217,6 +217,7 @@ public class Player : Avatar
         if (_collision.gameObject.GetComponent<Coin>() != null)
         {
             AddCoin();
+            SystemEventController.Instance.DispatchSystemEvent(SystemEventController.EVENT_COIN_COLLECTED);
             GameObject.Destroy(_collision.gameObject);
         }
     }

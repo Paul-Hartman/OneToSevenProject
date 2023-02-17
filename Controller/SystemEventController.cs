@@ -6,9 +6,12 @@ public class SystemEventController : MonoBehaviour
 {
     public const string EVENT_ENEMY_DEAD = "EVENT_ENEMY_DEAD";
     public const string EVENT_NPC_DEAD = "EVENT_NPC_DEAD";
+    public const string EVENT_COIN_COLLECTED = "EVENT_COIN_COLLECTED";
 
     public const string EVENT_CAMERA_SWITCHED_TO_1ST_PERSON = "EVENT_CAMERA_SWITCHED_TO_1ST_PERSON";
     public const string EVENT_CAMERA_SWITCHED_TO_3RD_PERSON = "EVENT_CAMERA_SWITCHED_TO_3RD_PERSON";
+
+    
     private static SystemEventController _instance;
     public static SystemEventController Instance
     {

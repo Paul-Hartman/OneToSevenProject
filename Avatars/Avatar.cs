@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public abstract class Avatar : StateMachine
@@ -9,6 +10,7 @@ public abstract class Avatar : StateMachine
     public float Speed = 2f;
     public Animator Model3d;
     public float HeightDetection = 4;
+    public TextMeshProUGUI InGameLife;
 
     protected int m_life = 100;
     protected PatrolWaypoints m_patrolComponent;
@@ -34,6 +36,10 @@ public abstract class Avatar : StateMachine
     {   
         
         m_life = InitialLife;
+        if (InGameLife != null)
+        {
+            InGameLife.text = m_life.ToString();
+        }
         m_patrolComponent = this.GetComponent<PatrolWaypoints>();
         if(m_patrolComponent != null)
         {
@@ -47,6 +53,17 @@ public abstract class Avatar : StateMachine
         {
             m_areaVisionDetection.DetectionEvent += PlayerDetectionEvent;
             m_areaVisionDetection.LostEvent += PlayerLostEvent;
+        }
+    }
+
+    protected void SetTargetLife(Transform _target)
+    {
+        if(InGameLife != null)
+        {
+            if(InGameLife.GetComponent<LookAtTarget>() != null)
+            {
+                InGameLife.GetComponent<LookAtTarget>().SetTarget(_target);
+            }
         }
     }
 
@@ -99,7 +116,10 @@ public abstract class Avatar : StateMachine
             m_life = 100;
         }
 
-        
+        if (InGameLife != null)
+        {
+            InGameLife.text = m_life.ToString();
+        }
     }
 
 
@@ -110,6 +130,11 @@ public abstract class Avatar : StateMachine
         if (m_life < 0)
         {
             m_life = 0;
+        }
+
+        if(InGameLife != null)
+        {
+            InGameLife.text = m_life.ToString();
         }
 
         

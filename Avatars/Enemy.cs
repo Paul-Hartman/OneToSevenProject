@@ -31,7 +31,7 @@ public class Enemy : Avatar
     protected override void Start()
     {
         base.Start();
-        
+        SetTargetLife(GameController.Instance.MyPlayer.transform);
         m_initialPosition = this.transform.position;
         SystemEventController.Instance.Event += ProcessSystemEvent;
         

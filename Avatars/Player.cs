@@ -100,6 +100,7 @@ public class Player : Avatar
     public void ResetPlayerLife()
     {
         m_life = InitialLife;
+        DisplayLife.text = "Life: " + m_life;
     }
 
     public override void InitLogic()

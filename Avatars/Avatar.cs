@@ -15,9 +15,16 @@ public abstract class Avatar : StateMachine
     protected AreaVisionDetection m_areaVisionDetection;
 
     protected int m_currentAnimation = -1;
+    protected bool m_useRigidBody = true;
     public int Life
     {
         get { return m_life; }
+    }
+
+    public bool UseRigidBody
+    {
+        get { return m_useRigidBody; }
+        set { m_useRigidBody = value; }
     }
 
     
@@ -134,8 +141,15 @@ public abstract class Avatar : StateMachine
 
     protected void MoveToPosition(Vector3 _increment)
     {
-
-        transform.GetComponent<Rigidbody>().MovePosition(transform.position + _increment);
+        if (m_useRigidBody)
+        {
+            transform.GetComponent<Rigidbody>().MovePosition(transform.position + _increment);
+        }
+        else
+        {
+            transform.position += _increment;
+        }
+        
     }
     // Update is called once per frame
     void Update()
